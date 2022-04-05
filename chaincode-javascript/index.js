@@ -6,9 +6,7 @@
 
 'use strict';
 
-// const assetTransfer = require('./lib/assetTransfer');
 const couponTransfer = require('./lib/couponTransfer');
 
-// module.exports.AssetTransfer = assetTransfer;
 module.exports.CouponTransfer = couponTransfer;
 module.exports.contracts = [couponTransfer];

@@ -63,63 +63,21 @@ async function main() {
 			// Get the contract from the network.
 			const contract = network.getContract('basic');
 			console.log("contract", contract)
-			// Initialize a set of asset data on the channel using the chaincode 'InitLedger' function.
-			// This type of transaction would only be run once by an application the first time it was started after it
-			// deployed the first time. Any updates to the chaincode deployed later would likely not need to run
-			// an "init" type function.
+
 			console.log('\n--> Submit Transaction: InitLedger, function creates the initial set of assets on the ledger');
 			await contract.submitTransaction('InitLedger');
 			console.log('*** Result: committed');
 
-			// // // // Let's try a query type operation (function).
-			// // // // This will be sent to just one peer and the results will be shown.
 			console.log('\n--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger');
 			let result = await contract.evaluateTransaction('GetAllAssets');
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 
-			// // Now let's try to submit a transaction.
-			// // This will be sent to both peers and if both peers endorse the transaction, the endorsed proposal will be sent
-			// // to the orderer to be committed by each of the peer's to the channel ledger.
-			// console.log('\n--> Submit Transaction: createCoupon, creates new asset with ID, color, owner, size, and appraisedValue arguments');
 			let res = await contract.submitTransaction('createCoupon', 'simpl', '4', '35%', true);
 			console.log('*** Result: committed');
 			if (`${res}` !== '') {
 				console.log(`*** Result: ${prettyJSONString(res.toString())}`);
 			}
 
-			// console.log('\n--> Evaluate Transaction: ReadAsset, function returns an asset with a given assetID');
-			// result = await contract.evaluateTransaction('ReadAsset', 'asset13');
-			// console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-
-			// console.log('\n--> Evaluate Transaction: AssetExists, function returns "true" if an asset with given assetID exist');
-			// result = await contract.evaluateTransaction('AssetExists', 'asset1');
-			// console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-
-			// console.log('\n--> Submit Transaction: UpdateAsset asset1, change the appraisedValue to 350');
-			// await contract.submitTransaction('deleteCoupon', "101");
-			// console.log('*** Result: committed');
-
-			// console.log('\n--> Evaluate Transaction: ReadAsset, function returns "asset1" attributes');
-			// result = await contract.evaluateTransaction('ReadAsset', 'asset1');
-			// console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-
-			// try {
-			// 	// How about we try a transactions where the executing chaincode throws an error
-			// 	// Notice how the submitTransaction will throw an error containing the error thrown by the chaincode
-			// 	console.log('\n--> Submit Transaction: UpdateAsset asset70, asset70 does not exist and should return an error');
-			// 	await contract.submitTransaction('UpdateAsset', 'asset70', 'blue', '5', 'Tomoko', '300');
-			// 	console.log('******** FAILED to return an error');
-			// } catch (error) {
-			// 	console.log(`*** Successfully caught the error: \n    ${error}`);
-			// }
-
-			// console.log('\n--> Submit Transaction: TransferAsset asset1, transfer to new owner of Tom');
-			// await contract.submitTransaction('TransferAsset', 'asset1', 'Tom');
-			// console.log('*** Result: committed');
-
-			// console.log('\n--> Evaluate Transaction: ReadAsset, function returns "asset1" attributes');
-			// result = await contract.evaluateTransaction('ReadAsset', 'asset1');
-			// console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 		} finally {
 			// Disconnect from the gateway when the application is closing
 			// This will close all connections to the network
